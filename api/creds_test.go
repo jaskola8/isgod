@@ -21,13 +21,13 @@ func TestGetCredentials(t *testing.T) {
 	}
 }
 
-func TestSetCredentials(t *testing.T) {
+func TestWriteCredentials(t *testing.T) {
 	tmpfile, err := ioutil.TempFile("", "tmp_creds.json")
 	defer tmpfile.Close()
 	if err != nil {
 		t.Fatalf("Error creating temp file: %s", err)
 	}
-	err = SetCredentials("username", "apikey", tmpfile)
+	err = WriteCredentials("username", "apikey", tmpfile)
 	if err != nil {
 		t.Fatalf("Error writing credentials: %s", err)
 	}

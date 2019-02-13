@@ -24,7 +24,7 @@ func GetCredentials(file *os.File) (Credentials, error) {
 }
 
 //Writes username and apikey to file in json format
-func SetCredentials(username, key string, file *os.File) error {
+func WriteCredentials(username, key string, file *os.File) error {
 	credentials := map[string]string{"Username": username, "APIKey": key}
 	encoder := json.NewEncoder(file)
 	err := encoder.Encode(credentials)
