@@ -9,7 +9,7 @@ import (
 //Type storing username and apikey, used in API authentication
 type Credentials struct {
 	Username string
-	APIKey   string
+	ApiKey   string
 }
 
 //Parses specified json file into Credentials type
