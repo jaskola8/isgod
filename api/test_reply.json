@@ -1,0 +1,19 @@
+{
+    "firstName": "FirstName",
+    "secondName": "SecondName",
+    "semester": "Semester",
+    "items": [
+        {
+            "content": "Content",
+            "hash": "Hash",
+            "subject": "",
+            "modifiedDate": "",
+            "modifiedBy": "",
+            "type": 1001,
+            "NoAttachments": 1
+        },
+        {   
+            "type": 1002
+        }
+    ]
+}
