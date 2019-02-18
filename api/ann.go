@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	ApiUrl = "https://isod.ee.pw.edu.pl/isod-portal/wapi"
+	ApiURL = "https://isod.ee.pw.edu.pl/isod-portal/wapi"
 )
 
 type Annoucement struct {
@@ -23,7 +23,7 @@ type Annoucement struct {
 	NoAttachments int
 }
 
-type Result struct {
+type Response struct {
 	Items      []Annoucement
 	FirstName  string
 	SecondName string
@@ -32,7 +32,7 @@ type Result struct {
 
 //Creates URL string from given arguments
 func createURL(creds Credentials, from, to int, full bool) string {
-	url, _ := url.Parse(ApiUrl)
+	url, _ := url.Parse(ApiURL)
 	query := url.Query()
 	if full {
 		query.Set("q", "mynewsfull")
@@ -60,7 +60,7 @@ func FetchHeaders(creds Credentials, from, to int) ([]Annoucement, error) {
 }
 
 //Returns data returned from GET method on given URL string
-func fetch(url string) (result Result, err error) {
+func fetch(url string) (result Response, err error) {
 	client := &http.Client{}
 	resp, err := client.Get(url)
 	if err != nil {

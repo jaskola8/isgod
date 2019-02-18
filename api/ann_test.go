@@ -44,10 +44,10 @@ func TestFetch(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Logf("%s", response.FirstName)
-	compareResults(&response, t)
+	compareResponse(&response, t)
 }
 
-func compareResults(response *Result, t *testing.T) {
+func compareResponse(response *Response, t *testing.T) {
 	if response.FirstName != "FirstName" {
 		t.Errorf("Expected %s, got %s.", "FirstName", response.FirstName)
 	}
