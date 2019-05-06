@@ -39,7 +39,7 @@ func WriteCredentials(username, key string, file *os.File) error {
 //Saves credentials to environmental variable
 func SaveCredentials(creds Credentials) error {
 
-	err := os.Setenv("isgod", fmt.Sprintf("%s:%s", creds.Username, creds.ApiKey))
+	err := os.Setenv("isgod", fmt.Sprintf("%s %s", creds.Username, creds.ApiKey))
 	if err != nil {
 		return err
 	}
@@ -53,7 +53,7 @@ func ReadEnvCredentials() (Credentials, error) {
 		return Credentials{}, errors.New("Credentials not found")
 	}
 	var username, key string
-	_, err := fmt.Scanf(str, "%s:%s", username, key)
+	_, err := fmt.Sscan(str, &username, &key)
 	if err != nil {
 		return Credentials{}, fmt.Errorf("Couldn't parse credentials: %s", err)
 	}

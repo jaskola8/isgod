@@ -15,10 +15,11 @@ func main() {
 	if err != nil {
 		os.Exit(2)
 	}
-	ann, err := api.FetchHeaders(creds, 0, 1)
+	resp, err := api.FetchHeaders(creds, 0, 1)
 	if err != nil {
 		os.Exit(3)
 	}
+	ann := resp.Items
 	first := ann[0]
 	fmt.Printf("Hash: %s \nTemat: %s \nData: %s, Typ: %d", first.Hash, first.Subject, first.ModifiedDate, first.Type)
 }

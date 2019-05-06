@@ -48,15 +48,15 @@ func createURL(creds Credentials, from, to int, full bool) string {
 }
 
 //Query database for annoucements, including their content
-func FetchFull(creds Credentials, from, to int) ([]Annoucement, error) {
+func FetchFull(creds Credentials, from, to int) (Response, error) {
 	data, err := fetch(createURL(creds, from, to, true))
-	return data.Items, err
+	return data, err
 }
 
 //Query database for annoucements, fetching everything except content
-func FetchHeaders(creds Credentials, from, to int) ([]Annoucement, error) {
+func FetchHeaders(creds Credentials, from, to int) (Response, error) {
 	data, err := fetch(createURL(creds, from, to, false))
-	return data.Items, err
+	return data, err
 }
 
 //Returns data returned from GET method on given URL string
@@ -74,6 +74,6 @@ func fetch(url string) (result Response, err error) {
 	if err != nil {
 		return result, fmt.Errorf("reading query body from %s: %v", url, err)
 	}
-	json.Unmarshal(data, &result)
-	return result, nil
+	err = json.Unmarshal(data, &result)
+	return result, err
 }

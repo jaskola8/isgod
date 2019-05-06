@@ -43,7 +43,6 @@ func TestFetch(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Logf("%s", response.FirstName)
 	compareResponse(&response, t)
 }
 
