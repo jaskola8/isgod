@@ -12,11 +12,11 @@ func TestGetCredentials(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Error opening file: %s", err)
 	}
-	credentials, err := GetCredentials(file)
+	credentials, err := ReadCredentials(file)
 	if err != nil {
 		t.Fatalf("Error reading from file: %s", err)
 	}
-	if credentials.Username != "username" || credentials.APIKey != "apikey" {
+	if credentials.Username != "username" || credentials.ApiKey != "apikey" {
 		t.Fatalf("Wrong credentials read: %s", credentials)
 	}
 }
@@ -32,11 +32,11 @@ func TestWriteCredentials(t *testing.T) {
 		t.Fatalf("Error writing credentials: %s", err)
 	}
 	tmpfile.Seek(0, 0)
-	credentials, err := GetCredentials(tmpfile)
+	credentials, err := ReadCredentials(tmpfile)
 	if err != nil {
 		t.Fatalf("Error reading from file: %s", err)
 	}
-	if credentials.Username != "username" || credentials.APIKey != "apikey" {
+	if credentials.Username != "username" || credentials.ApiKey != "apikey" {
 		t.Fatalf("Wrong credentials read: %s", credentials)
 	}
 }

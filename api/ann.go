@@ -40,7 +40,7 @@ func createURL(creds Credentials, from, to int, full bool) string {
 		query.Set("q", "mynewsheaders")
 	}
 	query.Set("username", creds.Username)
-	query.Set("apikey", creds.APIKey)
+	query.Set("apikey", creds.ApiKey)
 	query.Set("from", strconv.Itoa(from))
 	query.Set("to", strconv.Itoa(to))
 	url.RawQuery = query.Encode()
