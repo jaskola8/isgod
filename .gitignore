@@ -11,3 +11,12 @@
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
 creds.json
+/rcc.qrc
+/moc_moc.h
+/rcc_cgo_windows_windows_amd64.go
+/moc.cpp
+/moc.go
+/moc.h
+/moc_cgo_windows_windows_amd64.go
+/rcc.cpp
+/deploy/*
