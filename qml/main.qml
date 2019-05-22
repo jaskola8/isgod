@@ -4,13 +4,34 @@ import QtQuick.Layouts 1.3		//ColumnLayout
 import CustomQmlTypes 1.0		//CustomListModel
 
 Rectangle {
-    width: 300
-	height: 300
+    width: 400
+	height: 400
 	color: "#35322F"
+    RowLayout {
+        id: buttons
+        width: parent.width
+	    height: 40
+		Button {
+		    height: parent.height
+	        anchors.top: parent.top
+	        anchors.right: parent.right
+		    Layout.fillWidth: true
+		    text: "refresh"
+		    onClicked: listview.model.refresh()
+	    }
+		Button {
+		    height: parent.height
+	        anchors.top: parent.top
+	        anchors.left: parent.left
+		    Layout.fillWidth: true
+		    text: "refresh"
+		    onClicked: listview.model.refresh()
+	    }
+    }
 	ColumnLayout {
 	    id: list
-		anchors.top: parent.top
-        height: parent.height
+		anchors.top: buttons.bottom
+		anchors.bottom: parent.bottom
         width: parent.width
 		ListView {
 			id: listview
@@ -41,13 +62,6 @@ Rectangle {
 			        }
 			}
 		}
-		Button {
-		    height: 20
-	        anchors.bottom: parent.bottom
-		    Layout.fillWidth: true
-		    text: "refresh"
-		    onClicked: listview.model.refresh()
-	    }
 	}
 }
 

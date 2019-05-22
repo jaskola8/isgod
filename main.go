@@ -62,7 +62,10 @@ func (m *AnnListModel) refresh() {
 
 func newView() *quick.QQuickView {
 	view := quick.NewQQuickView(nil)
-	view.SetFlags(core.Qt__Dialog)
+	view.SetFlags(core.Qt__Widget)
+	view.SetFlags(core.Qt__FramelessWindowHint)
+	view.SetFlags(core.Qt__WindowStaysOnTopHint)
+	view.ConnectFocusOutEvent(func(event *gui.QFocusEvent) { view.Hide() })
 	view.SetSource(core.NewQUrl3("qrc:/qml/main.qml", 0))
 	view.SetResizeMode(quick.QQuickView__SizeRootObjectToView)
 	return view
@@ -80,6 +83,8 @@ func main() {
 	tray.ConnectActivated(func(reason widgets.QSystemTrayIcon__ActivationReason) {
 		if reason == widgets.QSystemTrayIcon__Trigger {
 			view.Show()
+			// TODO find way to activate window and refresh
+			view.Raise()
 		}
 	})
 	trayMenu := widgets.NewQMenu(nil)
