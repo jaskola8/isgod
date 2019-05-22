@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/therecipe/qt/core"
+	"github.com/therecipe/qt/gui"
 	"github.com/therecipe/qt/quick"
 	"github.com/therecipe/qt/widgets"
 	"isgod/api"
@@ -10,6 +11,7 @@ import (
 )
 
 func init() {
+
 	AnnListModel_QmlRegisterType2("CustomQmlTypes", 1, 0, "AnnListModel")
 }
 
@@ -52,21 +54,44 @@ func (m *AnnListModel) clear() {
 }
 func (m *AnnListModel) refresh() {
 	m.removeAll()
-	resp, _ := api.FetchHeaders(m.Creds(), 1, 5)
+	resp, _ := api.FetchHeaders(m.Creds(), 0, 10)
 	m.BeginInsertRows(core.NewQModelIndex(), 0, len(resp.Items))
 	m.modelData = append(resp.Items, m.modelData...)
 	m.EndInsertRows()
+}
+
+func newView() *quick.QQuickView {
+	view := quick.NewQQuickView(nil)
+	view.SetFlags(core.Qt__Dialog)
+	view.SetSource(core.NewQUrl3("qrc:/qml/main.qml", 0))
+	view.SetResizeMode(quick.QQuickView__SizeRootObjectToView)
+	return view
 }
 
 func main() {
 	core.QCoreApplication_SetAttribute(core.Qt__AA_EnableHighDpiScaling, true)
 	app := widgets.NewQApplication(len(os.Args), os.Args)
 
-	view := quick.NewQQuickView(nil)
-	view.SetResizeMode(quick.QQuickView__SizeRootObjectToView)
-	view.SetTitle("Hello World")
-	view.SetSource(core.NewQUrl3("qrc:/qml/main.qml", 0))
+	view := newView()
+	app.SetQuitOnLastWindowClosed(false)
+	tray := widgets.NewQSystemTrayIcon(nil)
+	icon := gui.NewQIcon5("tray.png")
+	tray.SetIcon(icon)
+	tray.ConnectActivated(func(reason widgets.QSystemTrayIcon__ActivationReason) {
+		if reason == widgets.QSystemTrayIcon__Trigger {
+			view.Show()
+		}
+	})
+	trayMenu := widgets.NewQMenu(nil)
+	quit := trayMenu.AddAction("Quit")
+	quit.ConnectTriggered(func(bool) {
+		app.Exit(0)
+	})
+	trayMenu.AddAction("Refresh")
+	tray.SetContextMenu(trayMenu)
 	view.Show()
+	tray.Show()
+
 	app.Exec()
 	/*file, err := os.Open("creds.json")
 	if err != nil {
