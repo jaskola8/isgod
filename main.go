@@ -5,13 +5,13 @@ import (
 	"github.com/therecipe/qt/core"
 	"github.com/therecipe/qt/gui"
 	"github.com/therecipe/qt/quick"
+	"github.com/therecipe/qt/quickcontrols2"
 	"github.com/therecipe/qt/widgets"
 	"isgod/api"
 	"os"
 )
 
 func init() {
-
 	AnnListModel_QmlRegisterType2("CustomQmlTypes", 1, 0, "AnnListModel")
 }
 
@@ -60,31 +60,28 @@ func (m *AnnListModel) refresh() {
 	m.EndInsertRows()
 }
 
-func newView() *quick.QQuickView {
+func createView() *quick.QQuickView {
 	view := quick.NewQQuickView(nil)
-	view.SetFlags(core.Qt__Widget)
 	view.SetFlags(core.Qt__FramelessWindowHint)
-	view.SetFlags(core.Qt__WindowStaysOnTopHint)
 	view.ConnectFocusOutEvent(func(event *gui.QFocusEvent) { view.Hide() })
 	view.SetSource(core.NewQUrl3("qrc:/qml/main.qml", 0))
 	view.SetResizeMode(quick.QQuickView__SizeRootObjectToView)
 	return view
 }
 
-func main() {
-	core.QCoreApplication_SetAttribute(core.Qt__AA_EnableHighDpiScaling, true)
-	app := widgets.NewQApplication(len(os.Args), os.Args)
-
-	view := newView()
-	app.SetQuitOnLastWindowClosed(false)
+func createTray(app *widgets.QApplication, view *quick.QQuickView) *widgets.QSystemTrayIcon {
 	tray := widgets.NewQSystemTrayIcon(nil)
-	icon := gui.NewQIcon5("tray.png")
+	icon := gui.NewQIcon5("qml/images/tray.png")
 	tray.SetIcon(icon)
 	tray.ConnectActivated(func(reason widgets.QSystemTrayIcon__ActivationReason) {
 		if reason == widgets.QSystemTrayIcon__Trigger {
-			view.Show()
-			// TODO find way to activate window and refresh
-			view.Raise()
+			if view.IsVisible() {
+				view.Hide()
+			} else {
+				view.Show()
+				view.RequestActivate()
+				view.Raise()
+			}
 		}
 	})
 	trayMenu := widgets.NewQMenu(nil)
@@ -94,9 +91,18 @@ func main() {
 	})
 	trayMenu.AddAction("Refresh")
 	tray.SetContextMenu(trayMenu)
+	return tray
+}
+
+func main() {
+	core.QCoreApplication_SetAttribute(core.Qt__AA_EnableHighDpiScaling, true)
+	app := widgets.NewQApplication(len(os.Args), os.Args)
+	app.SetQuitOnLastWindowClosed(false)
+	quickcontrols2.QQuickStyle_SetStyle("Material")
+	view := createView()
+	tray := createTray(app, view)
 	view.Show()
 	tray.Show()
-
 	app.Exec()
 	/*file, err := os.Open("creds.json")
 	if err != nil {

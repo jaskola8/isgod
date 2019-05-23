@@ -1,33 +1,44 @@
 import QtQuick 2.10				//ListView
-import QtQuick.Controls 2.3		//Button
+import QtQuick.Controls 2.5		//Button
 import QtQuick.Layouts 1.3		//ColumnLayout
 import CustomQmlTypes 1.0		//CustomListModel
-
+import QtQuick.Controls.Material 2.12
 Rectangle {
     width: 400
 	height: 400
-	color: "#35322F"
+	Material.theme: Material.Dark
+	Material.primary: Material.Dark
+	Material.foreground: Material.Dark
+	Material.background: Material.Dark
+	Material.accent: Material.Yellow
+
     RowLayout {
+
         id: buttons
         width: parent.width
-	    height: 40
-		Button {
-		    height: parent.height
+	    height: 45
+
+		RoundButton {
+		    height: 30
+		    width: 20
+		    icon.source: "images/refresh.png"
 	        anchors.top: parent.top
 	        anchors.right: parent.right
-		    Layout.fillWidth: true
-		    text: "refresh"
 		    onClicked: listview.model.refresh()
 	    }
-		Button {
-		    height: parent.height
+
+		RoundButton {
+		    height: 30
+		    width: 20
+		    icon.source: "images/refresh.png"
 	        anchors.top: parent.top
 	        anchors.left: parent.left
-		    Layout.fillWidth: true
-		    text: "refresh"
 		    onClicked: listview.model.refresh()
+
 	    }
+
     }
+
 	ColumnLayout {
 	    id: list
 		anchors.top: buttons.bottom
@@ -40,10 +51,10 @@ Rectangle {
 			Layout.fillHeight: true
 
 			model: AnnListModel{}
-			delegate: Rectangle {
+			delegate: Rectangle
+			 {
 			    width: parent.width
 			    height: 50
-			    radius: 5
 			    color: "transparent"
                 border.color: "black"
                 border.width: 1
@@ -56,7 +67,7 @@ Rectangle {
 			        width: parent.width
 			        text: display
 			        wrapMode: Text.WordWrap
-			        font.pointSize: 7
+			        font.pointSize: 9
 			        font.bold: true
 			        fontSizeMode: Text.Fit
 			        }
