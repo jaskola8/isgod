@@ -6,44 +6,14 @@ import QtQuick.Controls.Material 2.12
 Rectangle {
     width: 400
 	height: 400
-	Material.theme: Material.Dark
-	Material.primary: Material.Dark
-	Material.foreground: Material.Dark
-	Material.background: Material.Dark
-	Material.accent: Material.Yellow
-
-    RowLayout {
-
-        id: buttons
-        width: parent.width
-	    height: 45
-
-		RoundButton {
-		    height: 30
-		    width: 20
-		    icon.source: "images/refresh.png"
-	        anchors.top: parent.top
-	        anchors.right: parent.right
-		    onClicked: listview.model.refresh()
-	    }
-
-		RoundButton {
-		    height: 30
-		    width: 20
-		    icon.source: "images/refresh.png"
-	        anchors.top: parent.top
-	        anchors.left: parent.left
-		    onClicked: listview.model.refresh()
-
-	    }
-
-    }
+	color: "black"
 
 	ColumnLayout {
 	    id: list
-		anchors.top: buttons.bottom
-		anchors.bottom: parent.bottom
+		anchors.top: parent.top
+		anchors.bottom: buttons.top
         width: parent.width
+		height: 345
 		ListView {
 			id: listview
 
@@ -56,8 +26,6 @@ Rectangle {
 			    width: parent.width
 			    height: 50
 			    color: "transparent"
-                border.color: "black"
-                border.width: 1
 			        Text {
 			        color: "white"
 			        leftPadding: 4
@@ -74,5 +42,30 @@ Rectangle {
 			}
 		}
 	}
+
+	RowLayout {
+        id: buttons
+        anchors.top: list.bottom
+        anchors.bottom: parent.bottom
+        width: parent.width
+
+		RoundButton {
+		    height: 30
+		    width: 20
+		    icon.source: "images/refresh.png"
+		    anchors.left: parent.left
+		    onClicked: listview.model.refresh()
+	    }
+
+		RoundButton {
+		    height: 30
+		    width: 20
+		    icon.source: "images/tray.png"
+	        anchors.right: parent.right
+		    onClicked: listview.model.refresh()
+
+	    }
+
+    }
 }
 
