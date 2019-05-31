@@ -11,13 +11,6 @@ type Config struct {
 	FetchSize         int
 	RecentFingerprint string
 	FontSize          int
-	WindowWidth       int
-	WindowHeight      int
-	WindowPosX        int
-	WindowPosY        int
-	WindowOnTop       bool
-	WindowAutoHide    bool
-	DarkTheme         bool
 	AesKey            string
 }
 
@@ -42,4 +35,20 @@ func (conf *Config) Save(filename string) error {
 	encoder := json.NewEncoder(file)
 	err = encoder.Encode(conf)
 	return err
+}
+
+func initConfig() {
+
+}
+
+func readConfig() Config {
+	config, err := ReadConfig("config.json")
+	if err != nil {
+		config, err = ReadConfig("default_config.json")
+		if err != nil {
+
+		}
+		initConfig()
+	}
+	return config
 }
