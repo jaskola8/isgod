@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -39,10 +40,12 @@ func TestFetch(t *testing.T) {
 
 	go http.ListenAndServe(":3000", nil)
 
-	response, err := fetch("http://localhost:3000/test")
+	data, err := fetch("http://localhost:3000/test")
 	if err != nil {
 		t.Fatal(err)
 	}
+	var response Response
+	json.Unmarshal(data, &response)
 	compareResponse(&response, t)
 }
 

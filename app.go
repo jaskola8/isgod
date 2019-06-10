@@ -8,6 +8,10 @@ import (
 	"github.com/therecipe/qt/quickcontrols2"
 	"github.com/therecipe/qt/widgets"
 	"isgod/api"
+	"log"
+	"time"
+
+	//"log"
 	"os"
 )
 
@@ -20,7 +24,7 @@ type AnnListModel struct {
 
 	_         func()          `constructor:"init"`
 	_         func()          `signal:"clear,auto"`
-	_         func()          `signal:"refresh,auto"`
+	_         func(bool)      `signal:"refresh,auto"`
 	_         api.Credentials `property:"Creds"`
 	modelData []api.Annoucement
 }
@@ -30,6 +34,20 @@ func (m *AnnListModel) init() {
 	m.SetCreds(creds)
 	m.ConnectRowCount(m.rowCount)
 	m.ConnectData(m.data)
+	m.refresh(true)
+	go runDaemon(STOP, m)
+}
+
+func runDaemon(stop <-chan struct{}, annList *AnnListModel) {
+	ticker := time.NewTicker(time.Duration(CONFIG.RefreshTimeout) * time.Minute)
+	for {
+		select {
+		case <-ticker.C:
+			annList.refresh(false)
+		case <-stop:
+			return
+		}
+	}
 }
 
 func (m *AnnListModel) rowCount(*core.QModelIndex) int {
@@ -52,12 +70,22 @@ func (m *AnnListModel) removeAll() {
 func (m *AnnListModel) clear() {
 	m.removeAll()
 }
-func (m *AnnListModel) refresh() {
-	m.removeAll()
-	resp, _ := api.FetchHeaders(m.Creds(), 0, 10)
-	m.BeginInsertRows(core.NewQModelIndex(), 0, len(resp.Items))
-	m.modelData = append(resp.Items, m.modelData...)
-	m.EndInsertRows()
+func (m *AnnListModel) refresh(reload bool) {
+	finger, err := api.FetchFingerprint(CONFIG.Credentials)
+	if err == nil {
+		if finger.Fingerprint != CONFIG.RecentFingerprint || reload {
+			m.removeAll()
+			resp, _ := api.FetchAnnoucements(m.Creds(), 0, CONFIG.FetchSize, false)
+			m.BeginInsertRows(core.NewQModelIndex(), 0, len(resp.Items)-1)
+			m.modelData = append(resp.Items, m.modelData...)
+			m.EndInsertRows()
+			CONFIG.RecentFingerprint = finger.Fingerprint
+			err = CONFIG.Save(CONFIGFILE)
+			if err != nil {
+				log.Printf("Couldn't save configuration: %v", err)
+			}
+		}
+	}
 }
 
 func createView() *quick.QQuickView {
@@ -87,6 +115,7 @@ func createTray(app *widgets.QApplication, view *quick.QQuickView) *widgets.QSys
 	trayMenu := widgets.NewQMenu(nil)
 	quit := trayMenu.AddAction("Quit")
 	quit.ConnectTriggered(func(bool) {
+		STOP <- struct{}{}
 		app.Exit(0)
 	})
 	trayMenu.AddAction("Refresh")

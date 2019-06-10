@@ -2,16 +2,15 @@ package main
 
 import (
 	"encoding/json"
+	"isgod/api"
 	"os"
 )
 
 type Config struct {
-	RefreshTimeout    string
-	Muted             bool
+	Credentials       api.Credentials
+	RefreshTimeout    int
 	FetchSize         int
 	RecentFingerprint string
-	FontSize          int
-	AesKey            string
 }
 
 //Parses specified json file into Credentials type
@@ -28,27 +27,11 @@ func ReadConfig(filename string) (Config, error) {
 
 //Writes username and apikey to file in json format
 func (conf *Config) Save(filename string) error {
-	file, err := os.Open(filename)
+	file, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
 	encoder := json.NewEncoder(file)
 	err = encoder.Encode(conf)
 	return err
-}
-
-func initConfig() {
-
-}
-
-func readConfig() Config {
-	config, err := ReadConfig("config.json")
-	if err != nil {
-		config, err = ReadConfig("default_config.json")
-		if err != nil {
-
-		}
-		initConfig()
-	}
-	return config
 }
