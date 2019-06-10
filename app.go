@@ -99,7 +99,7 @@ func createView() *quick.QQuickView {
 
 func createTray(app *widgets.QApplication, view *quick.QQuickView) *widgets.QSystemTrayIcon {
 	tray := widgets.NewQSystemTrayIcon(nil)
-	icon := gui.NewQIcon5("qml/images/tray.png")
+	icon := gui.NewQIcon5(":/tray.png")
 	tray.SetIcon(icon)
 	tray.ConnectActivated(func(reason widgets.QSystemTrayIcon__ActivationReason) {
 		if reason == widgets.QSystemTrayIcon__Trigger {
@@ -130,7 +130,7 @@ func ExecApp() {
 	quickcontrols2.QQuickStyle_SetStyle("Material")
 	view := createView()
 	tray := createTray(APP, view)
-	view.Show()
 	tray.Show()
+	view.Show()
 	APP.Exec()
 }

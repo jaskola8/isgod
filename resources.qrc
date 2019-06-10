@@ -1,0 +1,7 @@
+<RCC>
+<qresource prefix="/">
+    <file alias="tray.png">qml/images/tray.png</file>
+    <file alias="reload.png">qml/images/reload.png</file>
+    <file alias="refresh.png">qml/images/refresh.png</file>
+</qresource>
+</RCC>

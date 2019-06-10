@@ -52,7 +52,7 @@ Rectangle {
 		RoundButton {
 		    height: 30
 		    width: 20
-		    icon.source: "images/refresh.png"
+		    icon.source: ":/refresh.png"
 		    anchors.left: parent.left
 		    onClicked: listview.model.refresh(false)
 	    }
@@ -60,7 +60,7 @@ Rectangle {
 		RoundButton {
 		    height: 30
 		    width: 20
-		    icon.source: "images/reload.png"
+		    icon.source: ":/reload.png"
 	        anchors.right: parent.right
 		    onClicked: listview.model.refresh(true)
 
